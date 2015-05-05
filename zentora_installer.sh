@@ -9,6 +9,20 @@ echo "#  THE SCRIPT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE  #"
 echo "# USEFUL, IT IS PROVIDED 'AS IS' AND WITHOUT ANY WARRANTY #"
 echo "###########################################################"
 	
+echo "Checking if Sentora is installed and compatible with this installer/updater..."
+
+if [ -d "/etc/sentora/panel" ]; then
+	VERSION_SENTORA=$(setso --show dbversion)
+	if [[ "$VERSION_SENTORA" = "1.0.0" ]]; then
+		echo "Sentora version $VERSION_SENTORA is compatible with this installer/updater."
+	else
+		echo "Sorry, Sentora version $VERSION_SENTORA is not compatible with this installer/updater."
+else
+	echo "Sorry, Sentora is not installed on your server."
+	echo "please install Sentora before using this $THEME_NAME installer/updater. (http://docs.sentora.org/?node=7)"
+	exit
+fi
+
 echo "Checking if the OS is compatible with this installer/updater..."
 
 if [ -f /etc/centos-release ]; then
@@ -25,9 +39,9 @@ fi
 
 if [[ "$OS" = "CentOs" && ("$VER" = "6" || "$VER" = "7" ) || 
       "$OS" = "Ubuntu" && ("$VER" = "12.04" || "$VER" = "14.04" ) ]] ; then 
-    echo "This OS is supported by Sentora and this theme installer."
+    echo "This OS is supported by Sentora and this theme installer/updater."
 else
-	echo "Sorry, this OS is not supported by Sentora and this theme installer." 
+	echo "Sorry, this OS is not supported by Sentora and this theme installer/updater." 
     exit 1
 fi
 
