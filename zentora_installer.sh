@@ -2,6 +2,7 @@
 
 THEME_NAME=Zentora
 THEME_URL=https://github.com/auxio/Zentora/archive/master.zip
+SENTORA_VERSION=( "1.0.0")
 
 echo "$THEME_NAME Theme installer/updater for Sentora     "
 echo "###########################################################"
@@ -25,10 +26,40 @@ fi
 
 if [[ "$OS" = "CentOs" && ("$VER" = "6" || "$VER" = "7" ) || 
       "$OS" = "Ubuntu" && ("$VER" = "12.04" || "$VER" = "14.04" ) ]] ; then 
-    echo "This OS is supported by Sentora and this theme installer."
+    echo "$OS is supported by Sentora and this theme installer/updater."
 else
-	echo "Sorry, this OS is not supported by Sentora and this theme installer." 
+	echo "Sorry, $OS $VERFULL is not supported by Sentora and this theme installer/updater." 
     exit 1
+fi
+
+echo "Checking if Sentora is installed and compatible with this installer/updater..."		
+
+function contains() {
+    local n=$#
+    local value=${!n}
+    for ((i=1;i < $#;i++)) {
+        if [ "${!i}" == "${value}" ]; then
+            echo "y"
+            return 0
+        fi
+    }
+    echo "n"
+    return 1
+}
+
+if [ -d "/etc/sentora/panel" ]; then		
+	VERSION_SENTORA=$(setso --show dbversion)		
+	if [ $(contains "${SENTORA_VERSION[@]}" "$VERSION_SENTORA") == "y" ]; then
+	#if [[ "$VERSION_SENTORA" = "1.0.0" ]]; then		
+		echo "Sentora version $VERSION_SENTORA is compatible with this installer/updater."		
+	else		
+		echo "Sorry, Sentora version $VERSION_SENTORA is not compatible with this installer/updater."	
+		exit
+	fi
+else		
+	echo "Sorry, Sentora is not installed on your server."		
+	echo "please install Sentora before using this $THEME_NAME installer/updater. (http://docs.sentora.org/?node=7)"		
+	exit		
 fi
 
 if [ -d "/etc/sentora/panel/etc/styles/$THEME_NAME" ]; then
