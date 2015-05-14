@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-echo "THIS INSTALLER IS NOT RELEASED JET."
-exit
-
 THEME_NAME=S-Type
 THEME_URL=https://github.com/auxio/S-Type/archive/master.zip
 SENTORA_VERSION=( "1.0.0")
